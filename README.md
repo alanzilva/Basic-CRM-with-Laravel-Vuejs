@@ -22,16 +22,16 @@ Basic CRM Application developed with Laravel PHP Framework.
 git clone https://github.com/simsek97/Basic-CRM-with-Laravel-Vuejs.git
 ````
  
-- Optionally you can change the name of the folder. I will change it to be **crm** with the following command
+- Optionally you can change the name of the folder. I will change it to be **crmvue** with the following command
 
 ````shell script
-mv Basic-CRM-with-Laravel crm
+mv Basic-CRM-with-Laravel-Vuejs crmvue
 ````
 
-- Go to the created folder which will be Basic-CRM-with-Laravel
+- Go to the created folder which will be crmvue
 
 ```shell script
-cd crm
+cd crmvue
 ````
 
 - First we need to make some configurations. Directories within the storage and the bootstrap/cache directories should be writable by Apache (or Nginx if you use it).
