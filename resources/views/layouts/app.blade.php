@@ -41,9 +41,9 @@
                                 <a class="dropdown-item" href="/companies">
                                     <i class="fas fa-list"></i> {{ __('messages.List') }}
                                 </a>
-                                <a class="dropdown-item" href="/companies/create">
-                                    <i class="fas fa-plus"></i> {{ __('messages.Add') }}
-                                </a>
+{{--                                <a class="dropdown-item" href="/companies/create">--}}
+{{--                                    <i class="fas fa-plus"></i> {{ __('messages.Add') }}--}}
+{{--                                </a>--}}
                             </div>
                         </li>
                         <li class="nav-item dropdown">
@@ -54,9 +54,9 @@
                                 <a class="dropdown-item" href="/employees">
                                     <i class="fas fa-list"></i> {{ __('messages.List') }}
                                 </a>
-                                <a class="dropdown-item" href="/employees/create">
-                                    <i class="fas fa-plus"></i> {{ __('messages.Add') }}
-                                </a>
+{{--                                <a class="dropdown-item" href="/employees/create">--}}
+{{--                                    <i class="fas fa-plus"></i> {{ __('messages.Add') }}--}}
+{{--                                </a>--}}
                             </div>
                         </li>
                     </ul>
@@ -74,39 +74,39 @@
                             {{--                                </li>--}}
                             {{--                            @endif--}}
                         @else
-                            @php $locale = session()->get('locale'); @endphp
-                        <!-- Language Links -->
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    @switch($locale)
-                                        @case('en')
-                                        {{ __('messages.English') }} <span class="caret"></span>
-                                        @break
-                                        @case('es')
-                                        {{ __('messages.Spanish') }} <span class="caret"></span>
-                                        @break
-                                        @default
-                                        {{ __('messages.Language') }} <span class="caret"></span>
-                                    @endswitch
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="/home/en"><i class="fas fa-globe"></i> {{ __('messages.English') }}</a>
-                                    <a class="dropdown-item" href="/home/es"><i class="fas fa-globe"></i> {{ __('messages.Spanish') }}</a>
-                                </div>
-                            </li>
+{{--                            @php $locale = session()->get('locale'); @endphp--}}
+{{--                            <!-- Language Links -->--}}
+{{--                            <li class="nav-item dropdown">--}}
+{{--                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"--}}
+{{--                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">--}}
+{{--                                    @switch($locale)--}}
+{{--                                        @case('en')--}}
+{{--                                        {{ __('messages.English') }} <span class="caret"></span>--}}
+{{--                                        @break--}}
+{{--                                        @case('es')--}}
+{{--                                        {{ __('messages.Spanish') }} <span class="caret"></span>--}}
+{{--                                        @break--}}
+{{--                                        @default--}}
+{{--                                        {{ __('messages.Language') }} <span class="caret"></span>--}}
+{{--                                    @endswitch--}}
+{{--                                </a>--}}
+{{--                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">--}}
+{{--                                    <a class="dropdown-item" href="/home/en"><i class="fas fa-globe"></i> {{ __('messages.English') }}</a>--}}
+{{--                                    <a class="dropdown-item" href="/home/es"><i class="fas fa-globe"></i> {{ __('messages.Spanish') }}</a>--}}
+{{--                                </div>--}}
+{{--                            </li>--}}
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    @if (Auth::user()->isAdministrator())
-                                        <a class="dropdown-item" href="/users">
-                                            <i class="fas fa-users"></i> {{ __('messages.Users') }}
-                                        </a>
-                                        <div class="dropdown-divider"></div>
-                                    @endif
+{{--                                    @if (Auth::user()->isAdministrator())--}}
+{{--                                        <a class="dropdown-item" href="/users">--}}
+{{--                                            <i class="fas fa-users"></i> {{ __('messages.Users') }}--}}
+{{--                                        </a>--}}
+{{--                                        <div class="dropdown-divider"></div>--}}
+{{--                                    @endif--}}
 
                                     <a class="dropdown-item" href="/logout"
                                        onclick="event.preventDefault();

@@ -49,6 +49,16 @@ const router = new Router({
             name: 'company-edit',
             component: () => import('./components/company/CompanyEdit.vue'),
         },
+        {
+            path: '/employees',
+            name: 'employees',
+            component: () => import('./components/employee/Employees.vue'),
+        },
+        {
+            path: '/employee/:id/edit',
+            name: 'employee-edit',
+            component: () => import('./components/employee/EmployeeEdit.vue'),
+        },
         // Redirect to 404 page, if no match found
         {
             path: '*',

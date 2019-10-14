@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Company;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -25,9 +27,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Show companies list
-     *
-     * @return Renderable
+     * @return Factory|View
      */
     public function index()
     {
@@ -50,7 +50,7 @@ class CompanyController extends Controller
     /**
      * Store company
      * @param Request $request
-     * @return RedirectResponse
+     * @return JsonResponse
      */
     public function store(Request $request)
     {
@@ -128,7 +128,7 @@ class CompanyController extends Controller
      *
      * @param Request $request
      * @param int $id
-     * @return RedirectResponse
+     * @return JsonResponse
      */
     public function update(Request $request, $id)
     {
@@ -176,7 +176,9 @@ class CompanyController extends Controller
         }
 
         //update
-        $update = DB::table('companies')->where('id', $id)->update($updateData);
+//        $update = DB::table('companies')->where('id', $id)->update($updateData);
+        $company = Company::findOrFail($id);
+        $update = $company->update($request->all());
 
         if($update) {
             //return with success
@@ -196,12 +198,11 @@ class CompanyController extends Controller
      *
      * @param int $id
      * @return RedirectResponse
-     * @throws AuthorizationException
      */
     public function destroy($id)
     {
         //check if authorized
-        $this->authorize('delete', Company::find($id));
+//        $this->authorize('delete', Company::find($id));
 
         //get logo file first
         $logo = DB::table('companies')->where('id', $id)->get('logo')->first();
@@ -214,14 +215,14 @@ class CompanyController extends Controller
             Storage::disk('local')->delete('public/' . $logo->logo);
 
             //return with success
-            return redirect()->route('companies')
-                ->with('success', 'Company deleted successfully!');
-
-        }  else  {
-
+            return response()->json([
+                'success' => trans('Company has been successfully deleted!')
+            ]);
+        } else {
             //return with error
-            return redirect()->route('companies')
-                ->with('error', 'Company could not be deleted!');
+            return response()->json([
+                'error' => trans('Company could not be deleted!')
+            ]);
         }
     }
 }

@@ -14,56 +14,61 @@
                         {{ success }}
                     </div>
                     <div class="text-center">
-                        <router-link to="/companies" class="btn btn-sm btn-primary">
-                            <i class="fas fa-home"></i> Companies
+                        <router-link to="/employees" class="btn btn-sm btn-primary">
+                            <i class="fas fa-home"></i> Employees
                         </router-link>
                     </div>
                 </div>
 
                 <div class="card" v-else>
-                    <div class="card-header">Edit Company</div>
+                    <div class="card-header">Edit Employee</div>
                     <form @submit.prevent="submitForm">
                         <div class="card-body">
                             <div class="form-group">
                                 <label>Name</label>
-                                <input type="text" class="form-control" v-bind:class="{ 'is-invalid' : errors.name }" name="name" placeholder="Name" v-model="company.name" />
-                                <span class="invalid-feedback" role="alert" v-if="errors.name">
-                                    <strong>{{ errors.name[0] }}</strong>
+                                <input type="text" class="form-control" v-bind:class="{ 'is-invalid' : errors.first_name }" name="first_name" placeholder="First name" v-model="employee.first_name" />
+                                <span class="invalid-feedback" role="alert" v-if="errors.first_name">
+                                    <strong>{{ errors.first_name[0] }}</strong>
+                                </span>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" class="form-control" v-bind:class="{ 'is-invalid' : errors.last_name }" name="last_name" placeholder="Last name" v-model="employee.last_name" />
+                                <span class="invalid-feedback" role="alert" v-if="errors.last_name">
+                                    <strong>{{ errors.last_name[0] }}</strong>
                                 </span>
                             </div>
 
                             <div class="form-group">
                                 <label>Email</label>
-                                <input type="text" class="form-control" v-bind:class="{ 'is-invalid' : errors.email }" name="email" placeholder="Email" v-model="company.email" />
+                                <input type="text" class="form-control" v-bind:class="{ 'is-invalid' : errors.email }" name="email" placeholder="Email" v-model="employee.email" />
                                 <span class="invalid-feedback" role="alert" v-if="errors.email">
                                     <strong>{{ errors.email[0] }}</strong>
                                 </span>
                             </div>
 
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="form-group">
-                                        <label>Logo</label>
-                                        <input type="file" class="form-control" name="logo_file" id="logo_file" ref="logo_file" v-on:change="handleFileUpload" />
-                                    </div>
-                                </div>
-                                <div class="col-md-4 text-right">
-                                    <img :src="'/storage/' + company.logo" style="width: 100px; height: 100px;">
-                                </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="text" class="form-control" v-bind:class="{ 'is-invalid' : errors.phone }" name="phone" placeholder="Phone" v-model="employee.phone" />
                             </div>
 
                             <div class="form-group">
-                                <label>Website</label>
-                                <input type="text" class="form-control" name="website" placeholder="Website" v-model="company.website" />
+                                <label>Company</label>
+                                <select class="form-control" name="company_id" v-model="employee.company_id">
+                                    <option v-for="company in companies" v-bind:value="company.id">{{ company.name }}</option>
+                                </select>
                             </div>
+
                         </div>
+
                         <div class="card-footer">
-                            <input type="hidden" name="logo" v-model="company.logo" />
-                            <router-link to="/companies" class="btn btn-danger">
+                            <router-link to="/employees" class="btn btn-danger">
                                 <i class="fas fa-step-backward"></i> Cancel
                             </router-link>
                             <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update</button>
                         </div>
+
                     </form>
                 </div>
             </div>
@@ -75,30 +80,24 @@
     export default {
         data() {
             return {
-                company: {},
-                logo_file: '',
+                employee: {},
+                companies: {},
                 submitted: false,
                 errors: '',
                 success: '',
             };
         },
         methods: {
-            handleFileUpload() {
-                this.logo_file = this.$refs.logo_file.files[0];
-            },
             submitForm() {
-                if(this.logo_file !== '') {
-                    this.company.logo = this.logo_file;
-                }
-
                 //submit
-                this.$http.post('/api/companies/' + this.$route.params.id,
+                this.$http.post('/api/employees/' + this.$route.params.id,
                     {
-                        'id': this.company.id,
-                        'name': this.company.name,
-                        'email': this.company.email,
-                        'logo': this.company.logo,
-                        'website': this.company.website,
+                        'id': this.employee.id,
+                        'first_name': this.employee.first_name,
+                        'last_name': this.employee.last_name,
+                        'email': this.employee.email,
+                        'phone': this.employee.phone,
+                        'company_id': this.employee.company_id,
                     },
                     {
                         headers: {
@@ -112,8 +111,7 @@
                             this.errors = response.data.errors;
                         }
                         else  {
-                            this.company = {};
-                            this.logo_file = '';
+                            this.employee = {};
                             this.submitted = true;
                             this.errors = '';
                             this.success = response.data.success;
@@ -126,9 +124,10 @@
             }
         },
         mounted() {
-            this.$http.get("/api/companies/" + this.$route.params.id)
+            this.$http.get("/api/employees/" + this.$route.params.id)
                 .then((response) => {
-                    this.company = response.data;
+                    this.employee = response.data.employee;
+                    this.companies = response.data.companies;
                 })
                 .catch((error) => { console.log(error) })
         }

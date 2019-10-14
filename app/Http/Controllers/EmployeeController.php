@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Company;
 use App\Employee;
 use App\User;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Auth\Access\Gate;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
 class EmployeeController extends Controller
@@ -23,22 +23,38 @@ class EmployeeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+//        $this->middleware('auth');
     }
 
     /**
-     * Show employees list
-     *
-     * @return Renderable
+     * @return JsonResponse
      */
     public function index()
     {
         $employees = Employee::with(['company' => function($query){
             $query->select(['id', 'name']);
-        }])->paginate(10);
+        }])->get();
 
-        return view('employee.index', [
-            'employees' => $employees
+        return response()->json($employees);
+    }
+
+    /**
+     * Show employee
+     *
+     * @param $id
+     * @return JsonResponse
+     */
+    public function show($id)
+    {
+        $employee = Employee::where('id', $id)->with(['company' => function($query){
+            $query->select(['id', 'name']);
+        }])->get()->first();
+
+        $companies = Company::all();
+
+        return response()->json([
+            'employee' => $employee,
+            'companies' => $companies,
         ]);
     }
 
@@ -61,17 +77,16 @@ class EmployeeController extends Controller
      * Store employee
      * @param Request $request
      * @return RedirectResponse
-     * @throws AuthorizationException
      */
     public function store(Request $request, User $user)
     {
         //user companies
-        $userCompanies = Auth::user()->companies()->pluck('companies.id');
-
-        if(Auth::user()->hasRole('Manager') && !$userCompanies->contains($request->get('company_id'))) {
-            return redirect('employees')
-                ->with('error', trans('You do not have permission to create an employee for this company!'));
-        }
+//        $userCompanies = Auth::user()->companies()->pluck('companies.id');
+//
+//        if(Auth::user()->hasRole('Manager') && !$userCompanies->contains($request->get('company_id'))) {
+//            return redirect('employees')
+//                ->with('error', trans('You do not have permission to create an employee for this company!'));
+//        }
 
         //basic validation
         $request->validate([
@@ -138,12 +153,11 @@ class EmployeeController extends Controller
      * @param Request $request
      * @param int $id
      * @return RedirectResponse
-     * @throws AuthorizationException
      */
     public function update(Request $request, $id)
     {
         //check if authorized
-        $this->authorize('update', Employee::find($id));
+//        $this->authorize('update', Employee::find($id));
 
         //basic validation
         $request->validate([
@@ -173,12 +187,13 @@ class EmployeeController extends Controller
 
         if($update) {
             //return with success
-            return redirect('employees')
-                ->with('success', trans('Employee has been successfully updated!'));
+            return response()->json([
+                'success' => trans('Employee has been successfully updated!')
+            ]);
         } else {
-            //return with error
-            return redirect('employees')
-                ->with('error', trans('Employee could not be updated!'));
+            return response()->json([
+                'success' => trans('Employee could not be updated!')
+            ]);
         }
     }
 
@@ -187,24 +202,24 @@ class EmployeeController extends Controller
      *
      * @param int $id
      * @return RedirectResponse
-     * @throws AuthorizationException
      */
     public function destroy($id)
     {
         //check if authorized
-        $this->authorize('delete', Employee::find($id));
+//        $this->authorize('delete', Employee::find($id));
 
         //delete the employee from db
         $delete = DB::table('employees')->where('id', $id)->delete();
 
         if($delete) {
             //return with success
-            return redirect()->route('employees')
-                ->with('success', 'Employee deleted successfully!');
-        }  else  {
-            //return with error
-            return redirect()->route('employees')
-                ->with('error', 'Employee could not be deleted!');
+            return response()->json([
+                'success' => trans('Employee has been successfully deleted!')
+            ]);
+        } else {
+            return response()->json([
+                'success' => trans('Employee could not be deleted!')
+            ]);
         }
     }
 }

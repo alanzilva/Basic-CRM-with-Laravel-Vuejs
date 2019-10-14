@@ -1,16 +1,6 @@
 <template>
     <div class="container">
         <div class="row justify-content-center">
-<!--            @if(session()->get('success'))-->
-<!--            <div class="col-md-12 mb-2">-->
-<!--                <div class="alert alert-success alert-dismissible fade show w-100" role="alert">-->
-<!--                    {{ session()->get('success') }}-->
-<!--                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">-->
-<!--                        <span aria-hidden="true">&times;</span>-->
-<!--                    </button>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            @endif-->
 
             <div class="col-md-12">
                 <div class="card">
@@ -41,9 +31,7 @@
                                         <button @click="editCompany(company.id)" class="btn btn-sm btn-warning text-nowrap"><i class="fas fa-edit"></i> Edit</button>
                                     </td>
                                     <td class="text-center" style="vertical-align: middle;">
-                                        <form :action="'/company/' + company.id" method="post">
-                                            <button class="btn btn-sm btn-danger text-nowrap" type="submit"><i class="fas fa-trash"></i> Delete</button>
-                                        </form>
+                                        <button @click="deleteCompany(company.id)" class="btn btn-sm btn-danger text-nowrap" type="submit"><i class="fas fa-trash"></i> Delete</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -72,6 +60,17 @@
         methods: {
             editCompany(id) {
                 this.$router.push({name: 'company-edit', params:{id: id}})
+            },
+            deleteCompany(id) {
+                this.$http.delete("/api/companies/" + id)
+                    .then((response) => {
+                        if(response.data.success) {
+                            this.$http.get("/api/companies")
+                                .then((response) => { this.companies = response.data })
+                                .catch((error) => { console.log(error) })
+                        }
+                    })
+                    .catch((error) => { console.log(error) })
             }
         },
         mounted() {

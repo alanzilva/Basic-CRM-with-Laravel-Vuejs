@@ -31,38 +31,26 @@ Route::get('/companies/{id}', function($id) {
 Route::post('/companies', 'CompanyController@store');
 
 //update a company
-Route::put('/companies/{id}', 'CompanyController@update');
+Route::post('/companies/{id}', 'CompanyController@update');
 
 //delete a company
-Route::middleware('auth:api')->delete('/companies/{id}', function($id) {
-    Company::find($id)->delete();
-    return 204;
-});
+Route::delete('/companies/{id}', 'CompanyController@destroy');
 
 /**
  * API Routes for Employees
  */
 
-//show all companies
-Route::middleware('auth:api')->get('employees', function() {
-    return Employee::all();
-});
-//show one company
-Route::middleware('auth:api')->get('/employees/{id}', function($id) {
-    return Employee::find($id);
-});
-//insert a company
-Route::middleware('auth:api')->post('/employees', function(Request $request) {
-    return Employee::create($request->all());
-});
-//update a company
-Route::middleware('auth:api')->put('/employees/{id}', function(Request $request, $id) {
-    $article = Employee::findOrFail($id);
-    $article->update($request->all());
-    return $article;
-});
-//delete a company
-Route::middleware('auth:api')->delete('/employees/{id}', function($id) {
-    Employee::find($id)->delete();
-    return 204;
-});
+//show all employees
+Route::get('employees', 'EmployeeController@index');
+
+//show one employee
+Route::get('/employees/{id}', 'EmployeeController@show');
+
+//insert a employee
+Route::post('/employees', 'EmployeeController@store');
+
+//update a employee
+Route::post('/employees/{id}', 'EmployeeController@update');
+
+//delete a employee
+Route::delete('/employees/{id}', 'EmployeeController@destroy');

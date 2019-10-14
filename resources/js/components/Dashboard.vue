@@ -18,7 +18,7 @@
                     There are y employees.
                 </div>
                 <div class="card-footer text-center">
-                    <router-link to="/companies">Show All</router-link>
+                    <router-link to="/employees">Show All</router-link>
                 </div>
             </div>
         </div>
