@@ -19,7 +19,7 @@ Basic CRM Application developed with Laravel PHP Framework.
 
 - Clone github repo
 ```shell script
-git clone https://github.com/simsek97/Basic-CRM-with-Laravel.git
+git clone https://github.com/simsek97/Basic-CRM-with-Laravel-Vuejs.git
 ````
  
 - Optionally you can change the name of the folder. I will change it to be **crm** with the following command
